@@ -8,9 +8,20 @@ const schema = Joi.object({
 
 const validationAddContact = (req, res, next) => {
   const validationResult = schema.validate(req.body);
+  const hasReqBody = req.body && Object.keys(req.body).length;
+
+  if (!hasReqBody) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
 
   if (validationResult.error) {
-    res.status(400).json({ message: validationResult.error.details });
+    const [details] = validationResult.error.details;
+    const reasonOfError = details.context.label;
+
+    res
+      .status(400)
+      .json({ message: `missing required ${reasonOfError} field` });
     return;
   }
 

@@ -67,7 +67,7 @@ const addContact = async (req, res) => {
     id: nanoid(),
     ...data,
   };
-
+  console.log("req in addController", req);
   try {
     const file = await fs.readFile(pathToContacts, "utf8");
     const parsedFile = JSON.parse(file);
@@ -77,6 +77,7 @@ const addContact = async (req, res) => {
 
     res.status(201).json(newContact);
   } catch (error) {
+    console.log("error in addController", error);
     res.status(400).json({ massage: error.message });
   }
 };
@@ -109,7 +110,7 @@ const updateContact = async (req, res) => {
 
     res.status(200).json(newContact);
   } catch (error) {
-    res.status(400).json({ massage: error.message });
+    res.status(404).json({ message: "Not found" });
   }
 };
 
